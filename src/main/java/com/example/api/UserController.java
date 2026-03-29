@@ -21,7 +21,8 @@ public class UserController {
     }
 
     // --- GET /users/{id} ---
-    @GetMapping("/{id}")
+    // Restrict to digits so bad paths (e.g. /users/abc) return 404, not 400 from type mismatch
+    @GetMapping("/{id:\\d+}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
         User user = users.get(id);
         if (user == null) {
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     // --- PUT /users/{id} ---
-    @PutMapping("/{id}")
+    @PutMapping("/{id:\\d+}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User updated) {
         if (!users.containsKey(id)) {
             return ResponseEntity.notFound().build();  // 404
@@ -50,7 +51,7 @@ public class UserController {
     }
 
     // --- DELETE /users/{id} ---
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:\\d+}")
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
         if (!users.containsKey(id)) {
             return ResponseEntity.notFound().build();  // 404
